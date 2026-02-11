@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_web_plugins/url_strategy.dart'; // Import this
 import 'config/routes/app_routes.dart';
 import 'config/theme/app_theme.dart';
 import 'injection_container.dart' as di;
@@ -6,6 +7,8 @@ import 'injection_container.dart' as di;
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
   
+  usePathUrlStrategy();
+
   // Initialize dependencies
   await di.initializeDependencies();
   
