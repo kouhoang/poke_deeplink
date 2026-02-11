@@ -10,9 +10,7 @@ import '../datasources/pokemon_remote_data_source.dart';
 class PokemonRepositoryImpl implements PokemonRepository {
   final PokemonRemoteDataSource remoteDataSource;
 
-  PokemonRepositoryImpl({
-    required this.remoteDataSource,
-  });
+  PokemonRepositoryImpl({required this.remoteDataSource});
 
   @override
   Future<Either<Failure, List<PokemonListItemEntity>>> getPokemonList({
@@ -26,22 +24,15 @@ class PokemonRepositoryImpl implements PokemonRepository {
       );
       return Right(result);
     } on ServerException catch (e) {
-      return Left(ServerFailure(
-        message: e.message,
-        statusCode: e.statusCode,
-      ));
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     } on NetworkException catch (e) {
-      return Left(NetworkFailure(
-        message: e.message,
-      ));
+      return Left(NetworkFailure(message: e.message));
     } on ParsingException catch (e) {
-      return Left(UnexpectedFailure(
-        message: 'Data parsing error: ${e.message}',
-      ));
+      return Left(
+        UnexpectedFailure(message: 'Data parsing error: ${e.message}'),
+      );
     } catch (e) {
-      return Left(UnexpectedFailure(
-        message: 'Unexpected error: $e',
-      ));
+      return Left(UnexpectedFailure(message: 'Unexpected error: $e'));
     }
   }
 
@@ -51,22 +42,15 @@ class PokemonRepositoryImpl implements PokemonRepository {
       final result = await remoteDataSource.getPokemonDetail(id);
       return Right(result);
     } on ServerException catch (e) {
-      return Left(ServerFailure(
-        message: e.message,
-        statusCode: e.statusCode,
-      ));
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     } on NetworkException catch (e) {
-      return Left(NetworkFailure(
-        message: e.message,
-      ));
+      return Left(NetworkFailure(message: e.message));
     } on ParsingException catch (e) {
-      return Left(UnexpectedFailure(
-        message: 'Data parsing error: ${e.message}',
-      ));
+      return Left(
+        UnexpectedFailure(message: 'Data parsing error: ${e.message}'),
+      );
     } catch (e) {
-      return Left(UnexpectedFailure(
-        message: 'Unexpected error: $e',
-      ));
+      return Left(UnexpectedFailure(message: 'Unexpected error: $e'));
     }
   }
 
@@ -76,22 +60,15 @@ class PokemonRepositoryImpl implements PokemonRepository {
       final result = await remoteDataSource.getPokemonByName(name);
       return Right(result);
     } on ServerException catch (e) {
-      return Left(ServerFailure(
-        message: e.message,
-        statusCode: e.statusCode,
-      ));
+      return Left(ServerFailure(message: e.message, statusCode: e.statusCode));
     } on NetworkException catch (e) {
-      return Left(NetworkFailure(
-        message: e.message,
-      ));
+      return Left(NetworkFailure(message: e.message));
     } on ParsingException catch (e) {
-      return Left(UnexpectedFailure(
-        message: 'Data parsing error: ${e.message}',
-      ));
+      return Left(
+        UnexpectedFailure(message: 'Data parsing error: ${e.message}'),
+      );
     } catch (e) {
-      return Left(UnexpectedFailure(
-        message: 'Unexpected error: $e',
-      ));
+      return Left(UnexpectedFailure(message: 'Unexpected error: $e'));
     }
   }
 }

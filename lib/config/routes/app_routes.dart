@@ -15,10 +15,8 @@ class AppRoutes {
       GoRoute(
         path: home,
         name: 'home',
-        pageBuilder: (context, state) => MaterialPage(
-          key: state.pageKey,
-          child: const PokemonListScreen(),
-        ),
+        pageBuilder: (context, state) =>
+            MaterialPage(key: state.pageKey, child: const PokemonListScreen()),
       ),
       GoRoute(
         path: pokemonDetail,
@@ -32,10 +30,7 @@ class AppRoutes {
         },
       ),
     ],
-    errorBuilder: (context, state) => Scaffold(
-      body: Center(
-        child: Text('Page not found: ${state.uri}'),
-      ),
-    ),
+    errorBuilder: (context, state) =>
+        Scaffold(body: Center(child: Text('Page not found: ${state.uri}'))),
   );
 }

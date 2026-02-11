@@ -17,10 +17,7 @@ class NetworkClient {
     int maxRetries = 3,
   }) async {
     return _executeWithRetry(
-      () => _client.get(
-        Uri.parse(url),
-        headers: headers,
-      ),
+      () => _client.get(Uri.parse(url), headers: headers),
       maxRetries: maxRetries,
     );
   }
@@ -33,11 +30,7 @@ class NetworkClient {
     int maxRetries = 3,
   }) async {
     return _executeWithRetry(
-      () => _client.post(
-        Uri.parse(url),
-        headers: headers,
-        body: body,
-      ),
+      () => _client.post(Uri.parse(url), headers: headers, body: body),
       maxRetries: maxRetries,
     );
   }
@@ -55,7 +48,8 @@ class NetworkClient {
           ApiConstants.connectionTimeout,
           onTimeout: () {
             throw NetworkException(
-              message: 'Connection timeout after ${ApiConstants.connectionTimeout.inSeconds}s',
+              message:
+                  'Connection timeout after ${ApiConstants.connectionTimeout.inSeconds}s',
             );
           },
         );
@@ -65,9 +59,7 @@ class NetworkClient {
         } else if (response.statusCode >= 500 && retryCount < maxRetries) {
           // Retry on server errors
           retryCount++;
-          await Future.delayed(
-            ApiConstants.retryDelay * retryCount,
-          );
+          await Future.delayed(ApiConstants.retryDelay * retryCount);
           continue;
         } else {
           throw ServerException(
@@ -81,26 +73,20 @@ class NetworkClient {
           await Future.delayed(ApiConstants.retryDelay * retryCount);
           continue;
         }
-        throw NetworkException(
-          message: 'No internet connection: ${e.message}',
-        );
+        throw NetworkException(message: 'No internet connection: ${e.message}');
       } on TimeoutException catch (e) {
         if (retryCount < maxRetries) {
           retryCount++;
           await Future.delayed(ApiConstants.retryDelay * retryCount);
           continue;
         }
-        throw NetworkException(
-          message: 'Request timeout: ${e.message}',
-        );
+        throw NetworkException(message: 'Request timeout: ${e.message}');
       } on NetworkException {
         rethrow;
       } on ServerException {
         rethrow;
       } catch (e) {
-        throw NetworkException(
-          message: 'Unexpected network error: $e',
-        );
+        throw NetworkException(message: 'Unexpected network error: $e');
       }
     }
   }

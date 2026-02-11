@@ -34,7 +34,8 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
     int offset = 0,
   }) async {
     try {
-      final url = '${ApiConstants.baseUrl}${ApiConstants.pokemonEndpoint}'
+      final url =
+          '${ApiConstants.baseUrl}${ApiConstants.pokemonEndpoint}'
           '?limit=$limit&offset=$offset';
 
       final response = await networkClient.get(url);
@@ -50,7 +51,10 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
         }
 
         return results
-            .map((item) => PokemonListItemModel.fromJson(item as Map<String, dynamic>))
+            .map(
+              (item) =>
+                  PokemonListItemModel.fromJson(item as Map<String, dynamic>),
+            )
             .toList();
       } else {
         throw ServerException(
@@ -65,9 +69,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
     } on ParsingException {
       rethrow;
     } catch (e) {
-      throw ParsingException(
-        message: 'Error parsing Pokemon list: $e',
-      );
+      throw ParsingException(message: 'Error parsing Pokemon list: $e');
     }
   }
 
@@ -92,16 +94,15 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
     } on NetworkException {
       rethrow;
     } catch (e) {
-      throw ParsingException(
-        message: 'Error parsing Pokemon detail: $e',
-      );
+      throw ParsingException(message: 'Error parsing Pokemon detail: $e');
     }
   }
 
   @override
   Future<PokemonModel> getPokemonByName(String name) async {
     try {
-      final url = '${ApiConstants.baseUrl}${ApiConstants.pokemonEndpoint}/${name.toLowerCase()}';
+      final url =
+          '${ApiConstants.baseUrl}${ApiConstants.pokemonEndpoint}/${name.toLowerCase()}';
 
       final response = await networkClient.get(url);
 
@@ -124,9 +125,7 @@ class PokemonRemoteDataSourceImpl implements PokemonRemoteDataSource {
     } on NetworkException {
       rethrow;
     } catch (e) {
-      throw ParsingException(
-        message: 'Error parsing Pokemon data: $e',
-      );
+      throw ParsingException(message: 'Error parsing Pokemon data: $e');
     }
   }
 }

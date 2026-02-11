@@ -6,7 +6,8 @@ import '../entities/pokemon_entity.dart';
 import '../repositories/pokemon_repository.dart';
 
 /// Use case for fetching Pokemon list
-class GetPokemonList implements UseCase<List<PokemonListItemEntity>, GetPokemonListParams> {
+class GetPokemonList
+    implements UseCase<List<PokemonListItemEntity>, GetPokemonListParams> {
   final PokemonRepository repository;
 
   GetPokemonList(this.repository);
@@ -26,10 +27,7 @@ class GetPokemonListParams extends Equatable {
   final int limit;
   final int offset;
 
-  const GetPokemonListParams({
-    this.limit = 151,
-    this.offset = 0,
-  });
+  const GetPokemonListParams({this.limit = 151, this.offset = 0});
 
   @override
   List<Object?> get props => [limit, offset];

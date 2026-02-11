@@ -17,9 +17,7 @@ class PokemonDetailCubit extends Cubit<PokemonDetailState> {
   Future<void> loadPokemonDetail(int id) async {
     emit(const PokemonDetailLoading());
 
-    final result = await getPokemonDetail(
-      GetPokemonDetailParams(id: id),
-    );
+    final result = await getPokemonDetail(GetPokemonDetailParams(id: id));
 
     result.fold(
       (failure) => emit(PokemonDetailError(message: failure.message)),
@@ -31,9 +29,7 @@ class PokemonDetailCubit extends Cubit<PokemonDetailState> {
   Future<void> loadPokemonByName(String name) async {
     emit(const PokemonDetailLoading());
 
-    final result = await getPokemonByName(
-      GetPokemonByNameParams(name: name),
-    );
+    final result = await getPokemonByName(GetPokemonByNameParams(name: name));
 
     result.fold(
       (failure) => emit(PokemonDetailError(message: failure.message)),
@@ -44,9 +40,7 @@ class PokemonDetailCubit extends Cubit<PokemonDetailState> {
   /// Refresh Pokemon detail
   Future<void> refreshPokemonDetail(int id) async {
     // Refresh without showing loading state
-    final result = await getPokemonDetail(
-      GetPokemonDetailParams(id: id),
-    );
+    final result = await getPokemonDetail(GetPokemonDetailParams(id: id));
 
     result.fold(
       (failure) => emit(PokemonDetailError(message: failure.message)),
@@ -54,4 +48,3 @@ class PokemonDetailCubit extends Cubit<PokemonDetailState> {
     );
   }
 }
-

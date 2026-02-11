@@ -7,9 +7,8 @@ import 'pokemon_list_state.dart';
 class PokemonListCubit extends Cubit<PokemonListState> {
   final GetPokemonList getPokemonList;
 
-  PokemonListCubit({
-    required this.getPokemonList,
-  }) : super(const PokemonListInitial());
+  PokemonListCubit({required this.getPokemonList})
+    : super(const PokemonListInitial());
 
   /// Load Pokemon list
   Future<void> loadPokemonList({
@@ -19,49 +18,47 @@ class PokemonListCubit extends Cubit<PokemonListState> {
     emit(const PokemonListLoading());
 
     final result = await getPokemonList(
-      GetPokemonListParams(
-        limit: limit,
-        offset: offset,
-      ),
+      GetPokemonListParams(limit: limit, offset: offset),
     );
 
-    result.fold(
-      (failure) => emit(PokemonListError(message: failure.message)),
-      (pokemons) {
-        final totalPages = (pokemons.length / ApiConstants.itemsPerPage).ceil();
-        emit(PokemonListLoaded(
+    result.fold((failure) => emit(PokemonListError(message: failure.message)), (
+      pokemons,
+    ) {
+      final totalPages = (pokemons.length / ApiConstants.itemsPerPage).ceil();
+      emit(
+        PokemonListLoaded(
           pokemons: pokemons,
           currentPage: 1,
           totalPages: totalPages,
           hasMore: pokemons.length >= limit,
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   /// Load a specific page
   Future<void> loadPokemonPage(int page) async {
     final currentState = state;
-    
+
     if (currentState is PokemonListLoaded) {
       emit(const PokemonListLoading());
 
       final result = await getPokemonList(
-        const GetPokemonListParams(
-          limit: ApiConstants.defaultLimit,
-          offset: 0,
-        ),
+        const GetPokemonListParams(limit: ApiConstants.defaultLimit, offset: 0),
       );
 
       result.fold(
         (failure) => emit(PokemonListError(message: failure.message)),
         (pokemons) {
-          final totalPages = (pokemons.length / ApiConstants.itemsPerPage).ceil();
-          emit(PokemonListLoaded(
-            pokemons: pokemons,
-            currentPage: page,
-            totalPages: totalPages,
-          ));
+          final totalPages = (pokemons.length / ApiConstants.itemsPerPage)
+              .ceil();
+          emit(
+            PokemonListLoaded(
+              pokemons: pokemons,
+              currentPage: page,
+              totalPages: totalPages,
+            ),
+          );
         },
       );
     }
@@ -71,34 +68,32 @@ class PokemonListCubit extends Cubit<PokemonListState> {
   Future<void> refreshPokemonList() async {
     // Refresh without showing loading state
     final result = await getPokemonList(
-      const GetPokemonListParams(
-        limit: ApiConstants.defaultLimit,
-        offset: 0,
-      ),
+      const GetPokemonListParams(limit: ApiConstants.defaultLimit, offset: 0),
     );
 
-    result.fold(
-      (failure) => emit(PokemonListError(message: failure.message)),
-      (pokemons) {
-        final totalPages = (pokemons.length / ApiConstants.itemsPerPage).ceil();
-        emit(PokemonListLoaded(
+    result.fold((failure) => emit(PokemonListError(message: failure.message)), (
+      pokemons,
+    ) {
+      final totalPages = (pokemons.length / ApiConstants.itemsPerPage).ceil();
+      emit(
+        PokemonListLoaded(
           pokemons: pokemons,
           currentPage: 1,
           totalPages: totalPages,
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   /// Load more items (pagination)
   Future<void> loadMorePokemons() async {
     final currentState = state;
-    
+
     if (currentState is PokemonListLoaded && currentState.hasMore) {
       emit(PokemonListLoadingMore(currentPokemons: currentState.pokemons));
 
       final newOffset = currentState.pokemons.length;
-      
+
       final result = await getPokemonList(
         GetPokemonListParams(
           limit: ApiConstants.itemsPerPage,
@@ -110,17 +105,19 @@ class PokemonListCubit extends Cubit<PokemonListState> {
         (failure) => emit(PokemonListError(message: failure.message)),
         (newPokemons) {
           final allPokemons = [...currentState.pokemons, ...newPokemons];
-          final totalPages = (allPokemons.length / ApiConstants.itemsPerPage).ceil();
-          
-          emit(PokemonListLoaded(
-            pokemons: allPokemons,
-            currentPage: currentState.currentPage,
-            totalPages: totalPages,
-            hasMore: newPokemons.length >= ApiConstants.itemsPerPage,
-          ));
+          final totalPages = (allPokemons.length / ApiConstants.itemsPerPage)
+              .ceil();
+
+          emit(
+            PokemonListLoaded(
+              pokemons: allPokemons,
+              currentPage: currentState.currentPage,
+              totalPages: totalPages,
+              hasMore: newPokemons.length >= ApiConstants.itemsPerPage,
+            ),
+          );
         },
       );
     }
   }
 }
-

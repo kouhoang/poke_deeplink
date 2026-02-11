@@ -31,10 +31,12 @@ class Pokemon {
     return Pokemon(
       id: json['id'],
       name: json['name'],
-      imageUrl: json['sprites']['other']['official-artwork']['front_default'] ??
+      imageUrl:
+          json['sprites']['other']['official-artwork']['front_default'] ??
           json['sprites']['front_default'] ??
           '',
-      shinyImageUrl: json['sprites']['other']['official-artwork']['front_shiny'],
+      shinyImageUrl:
+          json['sprites']['other']['official-artwork']['front_shiny'],
       types: (json['types'] as List)
           .map((type) => type['type']['name'] as String)
           .toList(),
@@ -116,10 +118,7 @@ class PokemonAbility {
   final String name;
   final bool isHidden;
 
-  PokemonAbility({
-    required this.name,
-    required this.isHidden,
-  });
+  PokemonAbility({required this.name, required this.isHidden});
 
   factory PokemonAbility.fromJson(Map<String, dynamic> json) {
     return PokemonAbility(
@@ -140,16 +139,10 @@ class PokemonListItem {
   final String name;
   final String url;
 
-  PokemonListItem({
-    required this.name,
-    required this.url,
-  });
+  PokemonListItem({required this.name, required this.url});
 
   factory PokemonListItem.fromJson(Map<String, dynamic> json) {
-    return PokemonListItem(
-      name: json['name'],
-      url: json['url'],
-    );
+    return PokemonListItem(name: json['name'], url: json['url']);
   }
 
   int get id {

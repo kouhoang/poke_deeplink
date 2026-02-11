@@ -25,9 +25,7 @@ class PokemonDetailBloc extends Bloc<PokemonDetailEvent, PokemonDetailState> {
   ) async {
     emit(const PokemonDetailLoading());
 
-    final result = await getPokemonDetail(
-      GetPokemonDetailParams(id: event.id),
-    );
+    final result = await getPokemonDetail(GetPokemonDetailParams(id: event.id));
 
     result.fold(
       (failure) => emit(PokemonDetailError(message: failure.message)),
@@ -58,9 +56,7 @@ class PokemonDetailBloc extends Bloc<PokemonDetailEvent, PokemonDetailState> {
     Emitter<PokemonDetailState> emit,
   ) async {
     // Refresh without showing loading state
-    final result = await getPokemonDetail(
-      GetPokemonDetailParams(id: event.id),
-    );
+    final result = await getPokemonDetail(GetPokemonDetailParams(id: event.id));
 
     result.fold(
       (failure) => emit(PokemonDetailError(message: failure.message)),

@@ -32,14 +32,9 @@ Future<void> initializeDependencies() async {
   sl.registerLazySingleton(() => GetPokemonByName(sl()));
 
   // Cubits - Factory pattern for multiple instances
+  sl.registerFactory(() => PokemonListCubit(getPokemonList: sl()));
+
   sl.registerFactory(
-    () => PokemonListCubit(getPokemonList: sl()),
-  );
-  
-  sl.registerFactory(
-    () => PokemonDetailCubit(
-      getPokemonDetail: sl(),
-      getPokemonByName: sl(),
-    ),
+    () => PokemonDetailCubit(getPokemonDetail: sl(), getPokemonByName: sl()),
   );
 }

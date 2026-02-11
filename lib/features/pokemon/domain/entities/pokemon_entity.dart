@@ -47,19 +47,19 @@ class PokemonEntity extends Equatable {
 
   @override
   List<Object?> get props => [
-        id,
-        name,
-        imageUrl,
-        shinyImageUrl,
-        types,
-        height,
-        weight,
-        stats,
-        abilities,
-        baseExperience,
-        genus,
-        description,
-      ];
+    id,
+    name,
+    imageUrl,
+    shinyImageUrl,
+    types,
+    height,
+    weight,
+    stats,
+    abilities,
+    baseExperience,
+    genus,
+    description,
+  ];
 }
 
 /// Domain entity for Pokemon stat
@@ -77,7 +77,10 @@ class PokemonStatEntity extends Equatable {
   String get displayName {
     return name
         .split('-')
-        .map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
+        .map(
+          (word) =>
+              word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '',
+        )
         .join(' ');
   }
 
@@ -109,15 +112,15 @@ class PokemonAbilityEntity extends Equatable {
   final String name;
   final bool isHidden;
 
-  const PokemonAbilityEntity({
-    required this.name,
-    required this.isHidden,
-  });
+  const PokemonAbilityEntity({required this.name, required this.isHidden});
 
   String get displayName {
     return name
         .split('-')
-        .map((word) => word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '')
+        .map(
+          (word) =>
+              word.isNotEmpty ? word[0].toUpperCase() + word.substring(1) : '',
+        )
         .join(' ');
   }
 

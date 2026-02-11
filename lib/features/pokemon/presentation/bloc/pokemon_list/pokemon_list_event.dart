@@ -13,10 +13,7 @@ class LoadPokemonList extends PokemonListEvent {
   final int limit;
   final int offset;
 
-  const LoadPokemonList({
-    this.limit = 151,
-    this.offset = 0,
-  });
+  const LoadPokemonList({this.limit = 151, this.offset = 0});
 
   @override
   List<Object?> get props => [limit, offset];

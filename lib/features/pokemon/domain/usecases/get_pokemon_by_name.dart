@@ -6,7 +6,8 @@ import '../entities/pokemon_entity.dart';
 import '../repositories/pokemon_repository.dart';
 
 /// Use case for fetching Pokemon by name
-class GetPokemonByName implements UseCase<PokemonEntity, GetPokemonByNameParams> {
+class GetPokemonByName
+    implements UseCase<PokemonEntity, GetPokemonByNameParams> {
   final PokemonRepository repository;
 
   GetPokemonByName(this.repository);

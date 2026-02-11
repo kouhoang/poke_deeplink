@@ -8,9 +8,8 @@ import 'pokemon_list_state.dart';
 class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
   final GetPokemonList getPokemonList;
 
-  PokemonListBloc({
-    required this.getPokemonList,
-  }) : super(const PokemonListInitial()) {
+  PokemonListBloc({required this.getPokemonList})
+    : super(const PokemonListInitial()) {
     on<LoadPokemonList>(_onLoadPokemonList);
     on<LoadPokemonPage>(_onLoadPokemonPage);
     on<RefreshPokemonList>(_onRefreshPokemonList);
@@ -25,24 +24,22 @@ class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
     emit(const PokemonListLoading());
 
     final result = await getPokemonList(
-      GetPokemonListParams(
-        limit: event.limit,
-        offset: event.offset,
-      ),
+      GetPokemonListParams(limit: event.limit, offset: event.offset),
     );
 
-    result.fold(
-      (failure) => emit(PokemonListError(message: failure.message)),
-      (pokemons) {
-        final totalPages = (pokemons.length / ApiConstants.itemsPerPage).ceil();
-        emit(PokemonListLoaded(
+    result.fold((failure) => emit(PokemonListError(message: failure.message)), (
+      pokemons,
+    ) {
+      final totalPages = (pokemons.length / ApiConstants.itemsPerPage).ceil();
+      emit(
+        PokemonListLoaded(
           pokemons: pokemons,
           currentPage: 1,
           totalPages: totalPages,
           hasMore: pokemons.length >= event.limit,
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   /// Handles loading a specific page
@@ -51,26 +48,26 @@ class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
     Emitter<PokemonListState> emit,
   ) async {
     final currentState = state;
-    
+
     if (currentState is PokemonListLoaded) {
       emit(const PokemonListLoading());
 
       final result = await getPokemonList(
-        GetPokemonListParams(
-          limit: ApiConstants.defaultLimit,
-          offset: 0,
-        ),
+        GetPokemonListParams(limit: ApiConstants.defaultLimit, offset: 0),
       );
 
       result.fold(
         (failure) => emit(PokemonListError(message: failure.message)),
         (pokemons) {
-          final totalPages = (pokemons.length / ApiConstants.itemsPerPage).ceil();
-          emit(PokemonListLoaded(
-            pokemons: pokemons,
-            currentPage: event.page,
-            totalPages: totalPages,
-          ));
+          final totalPages = (pokemons.length / ApiConstants.itemsPerPage)
+              .ceil();
+          emit(
+            PokemonListLoaded(
+              pokemons: pokemons,
+              currentPage: event.page,
+              totalPages: totalPages,
+            ),
+          );
         },
       );
     }
@@ -83,23 +80,21 @@ class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
   ) async {
     // Refresh without showing loading state
     final result = await getPokemonList(
-      const GetPokemonListParams(
-        limit: ApiConstants.defaultLimit,
-        offset: 0,
-      ),
+      const GetPokemonListParams(limit: ApiConstants.defaultLimit, offset: 0),
     );
 
-    result.fold(
-      (failure) => emit(PokemonListError(message: failure.message)),
-      (pokemons) {
-        final totalPages = (pokemons.length / ApiConstants.itemsPerPage).ceil();
-        emit(PokemonListLoaded(
+    result.fold((failure) => emit(PokemonListError(message: failure.message)), (
+      pokemons,
+    ) {
+      final totalPages = (pokemons.length / ApiConstants.itemsPerPage).ceil();
+      emit(
+        PokemonListLoaded(
           pokemons: pokemons,
           currentPage: 1,
           totalPages: totalPages,
-        ));
-      },
-    );
+        ),
+      );
+    });
   }
 
   /// Handles loading more items (pagination)
@@ -108,12 +103,12 @@ class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
     Emitter<PokemonListState> emit,
   ) async {
     final currentState = state;
-    
+
     if (currentState is PokemonListLoaded && currentState.hasMore) {
       emit(PokemonListLoadingMore(currentPokemons: currentState.pokemons));
 
       final newOffset = currentState.pokemons.length;
-      
+
       final result = await getPokemonList(
         GetPokemonListParams(
           limit: ApiConstants.itemsPerPage,
@@ -125,14 +120,17 @@ class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
         (failure) => emit(PokemonListError(message: failure.message)),
         (newPokemons) {
           final allPokemons = [...currentState.pokemons, ...newPokemons];
-          final totalPages = (allPokemons.length / ApiConstants.itemsPerPage).ceil();
-          
-          emit(PokemonListLoaded(
-            pokemons: allPokemons,
-            currentPage: currentState.currentPage,
-            totalPages: totalPages,
-            hasMore: newPokemons.length >= ApiConstants.itemsPerPage,
-          ));
+          final totalPages = (allPokemons.length / ApiConstants.itemsPerPage)
+              .ceil();
+
+          emit(
+            PokemonListLoaded(
+              pokemons: allPokemons,
+              currentPage: currentState.currentPage,
+              totalPages: totalPages,
+              hasMore: newPokemons.length >= ApiConstants.itemsPerPage,
+            ),
+          );
         },
       );
     }

@@ -16,16 +16,16 @@ class PokemonListScreen extends StatefulWidget {
 class _PokemonListScreenState extends State<PokemonListScreen> {
   final PokemonService _pokemonService = PokemonService();
   final PageController _pageController = PageController();
-  
+
   List<PokemonListItem> _allPokemon = [];
   final Map<int, List<Pokemon>> _loadedPages = {};
-  
+
   bool _isLoadingList = true;
   String? _error;
-  
+
   int _currentPage = 0;
   static const int _pokemonPerPage = 50; // Increased for web
-  
+
   @override
   void initState() {
     super.initState();
@@ -45,7 +45,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
         _allPokemon = pokemonList;
         _isLoadingList = false;
       });
-      
+
       _loadPage(0);
     } catch (e) {
       setState(() {
@@ -57,18 +57,21 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
 
   Future<void> _loadPage(int page) async {
     if (_loadedPages.containsKey(page)) return;
-    
+
     final startIndex = page * _pokemonPerPage;
-    final endIndex = (startIndex + _pokemonPerPage).clamp(0, _allPokemon.length);
+    final endIndex = (startIndex + _pokemonPerPage).clamp(
+      0,
+      _allPokemon.length,
+    );
     final pageItems = _allPokemon.sublist(startIndex, endIndex);
-    
+
     try {
-      final futures = pageItems.map((item) => 
-        _pokemonService.getPokemonDetail(item.id)
+      final futures = pageItems.map(
+        (item) => _pokemonService.getPokemonDetail(item.id),
       );
-      
+
       final results = await Future.wait(futures);
-      
+
       setState(() {
         _loadedPages[page] = results;
       });
@@ -91,12 +94,12 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
 
   // Get responsive column count based on screen width
   int _getColumnCount(double width) {
-    if (width > 1400) return 8;  // Very wide screens
-    if (width > 1200) return 6;  // Desktop
-    if (width > 900) return 5;   // Laptop
-    if (width > 600) return 4;   // Tablet landscape
-    if (width > 400) return 3;   // Tablet portrait
-    return 2;                     // Mobile
+    if (width > 1400) return 8; // Very wide screens
+    if (width > 1200) return 6; // Desktop
+    if (width > 900) return 5; // Laptop
+    if (width > 600) return 4; // Tablet landscape
+    if (width > 400) return 3; // Tablet portrait
+    return 2; // Mobile
   }
 
   Color _getTypeColor(String type) {
@@ -125,9 +128,9 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
 
   List<Widget> _buildPageIndicators() {
     List<Widget> indicators = [];
-    
+
     indicators.add(_buildPageButton(0));
-    
+
     if (_totalPages <= 7) {
       for (int i = 1; i < _totalPages; i++) {
         indicators.add(_buildPageButton(i));
@@ -153,7 +156,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
         indicators.add(_buildPageButton(_totalPages - 1));
       }
     }
-    
+
     return indicators;
   }
 
@@ -248,7 +251,11 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 64, color: Color(0xFFFF6B6B)),
+              const Icon(
+                Icons.error_outline,
+                size: 64,
+                color: Color(0xFFFF6B6B),
+              ),
               const SizedBox(height: 16),
               Text(
                 'Error loading Pokémon',
@@ -273,7 +280,10 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF4ECDC4),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -290,7 +300,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
       body: LayoutBuilder(
         builder: (context, constraints) {
           final columnCount = _getColumnCount(constraints.maxWidth);
-          
+
           return Column(
             children: [
               // Compact App Bar
@@ -305,7 +315,10 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                 child: SafeArea(
                   bottom: false,
                   child: Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 16),
+                    padding: const EdgeInsets.symmetric(
+                      horizontal: 24,
+                      vertical: 16,
+                    ),
                     child: Row(
                       children: [
                         Expanded(
@@ -337,10 +350,14 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                             vertical: 8,
                           ),
                           decoration: BoxDecoration(
-                            color: const Color(0xFF4ECDC4).withValues(alpha: 0.2),
+                            color: const Color(
+                              0xFF4ECDC4,
+                            ).withValues(alpha: 0.2),
                             borderRadius: BorderRadius.circular(16),
                             border: Border.all(
-                              color: const Color(0xFF4ECDC4).withValues(alpha: 0.5),
+                              color: const Color(
+                                0xFF4ECDC4,
+                              ).withValues(alpha: 0.5),
                               width: 1.5,
                             ),
                           ),
@@ -370,7 +387,7 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
                   itemCount: _totalPages,
                   itemBuilder: (context, pageIndex) {
                     final pokemonList = _loadedPages[pageIndex];
-                    
+
                     if (pokemonList == null) {
                       return Center(
                         child: Column(
@@ -423,7 +440,10 @@ class _PokemonListScreenState extends State<PokemonListScreen> {
 
               // Pagination Controls
               Container(
-                padding: const EdgeInsets.symmetric(vertical: 12, horizontal: 16),
+                padding: const EdgeInsets.symmetric(
+                  vertical: 12,
+                  horizontal: 16,
+                ),
                 decoration: BoxDecoration(
                   color: const Color(0xFF1E293B),
                   boxShadow: [
@@ -511,190 +531,199 @@ class _PokemonGridCardState extends State<_PokemonGridCard> {
         child: AnimatedScale(
           scale: _isHovered ? 1.05 : 1.0,
           duration: const Duration(milliseconds: 200),
-          child: Container(
-            decoration: BoxDecoration(
-              gradient: LinearGradient(
-                begin: Alignment.topLeft,
-                end: Alignment.bottomRight,
-                colors: [
-                  primaryColor.withValues(alpha: 0.2),
-                  primaryColor.withValues(alpha: 0.05),
-                ],
-              ),
-              borderRadius: BorderRadius.circular(14),
-              border: Border.all(
-                color: _isHovered 
-                    ? primaryColor.withValues(alpha: 0.6)
-                    : primaryColor.withValues(alpha: 0.3),
-                width: _isHovered ? 2 : 1.5,
-              ),
-              boxShadow: _isHovered
-                  ? [
-                      BoxShadow(
-                        color: primaryColor.withValues(alpha: 0.3),
-                        blurRadius: 12,
-                        offset: const Offset(0, 4),
-                      ),
-                    ]
-                  : null,
-            ),
-            child: Stack(
-              children: [
-                // Pokeball Background
-                Positioned(
-                  right: -8,
-                  bottom: -8,
-                  child: Opacity(
-                    opacity: 0.05,
-                    child: Icon(
-                      Icons.catching_pokemon,
-                      size: 60,
-                      color: primaryColor,
-                    ),
-                  ),
-                ),
-
-                // Content
-                Padding(
-                  padding: const EdgeInsets.all(8),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      // ID Badge
-                      Align(
-                        alignment: Alignment.topRight,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 6,
-                            vertical: 2,
-                          ),
-                          decoration: BoxDecoration(
-                            color: primaryColor.withValues(alpha: 0.3),
-                            borderRadius: BorderRadius.circular(6),
-                          ),
-                          child: Text(
-                            '#${widget.pokemon.id.toString().padLeft(3, '0')}',
-                            style: GoogleFonts.poppins(
-                              fontSize: 9,
-                              fontWeight: FontWeight.bold,
-                              color: Colors.white,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const Spacer(),
-
-                      // Pokemon Image
-                      Center(
-                        child: Hero(
-                          tag: 'pokemon-${widget.pokemon.id}',
-                          child: CachedNetworkImage(
-                            imageUrl: widget.pokemon.imageUrl,
-                            height: 55,
-                            width: 55,
-                            fit: BoxFit.contain,
-                            placeholder: (context, url) => const SizedBox(
-                              width: 18,
-                              height: 18,
-                              child: CircularProgressIndicator(
-                                strokeWidth: 2,
-                                color: Colors.white38,
-                              ),
-                            ),
-                            errorWidget: (context, url, error) => const Icon(
-                              Icons.catching_pokemon,
-                              size: 35,
-                              color: Colors.white38,
-                            ),
-                          ),
-                        ),
-                      ),
-
-                      const Spacer(),
-
-                      // Name
-                      Text(
-                        widget.pokemon.capitalizedName,
-                        style: GoogleFonts.poppins(
-                          fontSize: 11,
-                          fontWeight: FontWeight.bold,
-                          color: Colors.white,
-                        ),
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                      ),
-
-                      const SizedBox(height: 4),
-
-                      // Types
-                      Wrap(
-                        spacing: 3,
-                        runSpacing: 3,
-                        children: widget.pokemon.types.take(2).map((type) {
-                          final color = widget.getTypeColor(type);
-                          return Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 5,
-                              vertical: 2,
-                            ),
-                            decoration: BoxDecoration(
-                              color: color.withValues(alpha: 0.3),
-                              borderRadius: BorderRadius.circular(4),
-                              border: Border.all(
-                                color: color.withValues(alpha: 0.6),
-                                width: 0.8,
-                              ),
-                            ),
-                            child: Text(
-                              type.toUpperCase(),
-                              style: GoogleFonts.poppins(
-                                fontSize: 7,
-                                fontWeight: FontWeight.bold,
-                                color: Colors.white,
-                                letterSpacing: 0.3,
-                              ),
-                            ),
-                          );
-                        }).toList(),
-                      ),
-
-                      const SizedBox(height: 4),
-
-                      // Stats
-                      Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                        children: [
-                          _StatChip(
-                            label: 'HP',
-                            value: widget.pokemon.stats[0].baseStat.toString(),
-                            color: const Color(0xFFFF6B6B),
-                          ),
-                          _StatChip(
-                            label: 'ATK',
-                            value: widget.pokemon.stats[1].baseStat.toString(),
-                            color: const Color(0xFFFFD93D),
-                          ),
-                          _StatChip(
-                            label: 'DEF',
-                            value: widget.pokemon.stats[2].baseStat.toString(),
-                            color: const Color(0xFF4ECDC4),
-                          ),
+          child:
+              Container(
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        begin: Alignment.topLeft,
+                        end: Alignment.bottomRight,
+                        colors: [
+                          primaryColor.withValues(alpha: 0.2),
+                          primaryColor.withValues(alpha: 0.05),
                         ],
                       ),
-                    ],
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(
+                        color: _isHovered
+                            ? primaryColor.withValues(alpha: 0.6)
+                            : primaryColor.withValues(alpha: 0.3),
+                        width: _isHovered ? 2 : 1.5,
+                      ),
+                      boxShadow: _isHovered
+                          ? [
+                              BoxShadow(
+                                color: primaryColor.withValues(alpha: 0.3),
+                                blurRadius: 12,
+                                offset: const Offset(0, 4),
+                              ),
+                            ]
+                          : null,
+                    ),
+                    child: Stack(
+                      children: [
+                        // Pokeball Background
+                        Positioned(
+                          right: -8,
+                          bottom: -8,
+                          child: Opacity(
+                            opacity: 0.05,
+                            child: Icon(
+                              Icons.catching_pokemon,
+                              size: 60,
+                              color: primaryColor,
+                            ),
+                          ),
+                        ),
+
+                        // Content
+                        Padding(
+                          padding: const EdgeInsets.all(8),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.start,
+                            children: [
+                              // ID Badge
+                              Align(
+                                alignment: Alignment.topRight,
+                                child: Container(
+                                  padding: const EdgeInsets.symmetric(
+                                    horizontal: 6,
+                                    vertical: 2,
+                                  ),
+                                  decoration: BoxDecoration(
+                                    color: primaryColor.withValues(alpha: 0.3),
+                                    borderRadius: BorderRadius.circular(6),
+                                  ),
+                                  child: Text(
+                                    '#${widget.pokemon.id.toString().padLeft(3, '0')}',
+                                    style: GoogleFonts.poppins(
+                                      fontSize: 9,
+                                      fontWeight: FontWeight.bold,
+                                      color: Colors.white,
+                                    ),
+                                  ),
+                                ),
+                              ),
+
+                              const Spacer(),
+
+                              // Pokemon Image
+                              Center(
+                                child: Hero(
+                                  tag: 'pokemon-${widget.pokemon.id}',
+                                  child: CachedNetworkImage(
+                                    imageUrl: widget.pokemon.imageUrl,
+                                    height: 55,
+                                    width: 55,
+                                    fit: BoxFit.contain,
+                                    placeholder: (context, url) =>
+                                        const SizedBox(
+                                          width: 18,
+                                          height: 18,
+                                          child: CircularProgressIndicator(
+                                            strokeWidth: 2,
+                                            color: Colors.white38,
+                                          ),
+                                        ),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(
+                                          Icons.catching_pokemon,
+                                          size: 35,
+                                          color: Colors.white38,
+                                        ),
+                                  ),
+                                ),
+                              ),
+
+                              const Spacer(),
+
+                              // Name
+                              Text(
+                                widget.pokemon.capitalizedName,
+                                style: GoogleFonts.poppins(
+                                  fontSize: 11,
+                                  fontWeight: FontWeight.bold,
+                                  color: Colors.white,
+                                ),
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                              ),
+
+                              const SizedBox(height: 4),
+
+                              // Types
+                              Wrap(
+                                spacing: 3,
+                                runSpacing: 3,
+                                children: widget.pokemon.types.take(2).map((
+                                  type,
+                                ) {
+                                  final color = widget.getTypeColor(type);
+                                  return Container(
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 5,
+                                      vertical: 2,
+                                    ),
+                                    decoration: BoxDecoration(
+                                      color: color.withValues(alpha: 0.3),
+                                      borderRadius: BorderRadius.circular(4),
+                                      border: Border.all(
+                                        color: color.withValues(alpha: 0.6),
+                                        width: 0.8,
+                                      ),
+                                    ),
+                                    child: Text(
+                                      type.toUpperCase(),
+                                      style: GoogleFonts.poppins(
+                                        fontSize: 7,
+                                        fontWeight: FontWeight.bold,
+                                        color: Colors.white,
+                                        letterSpacing: 0.3,
+                                      ),
+                                    ),
+                                  );
+                                }).toList(),
+                              ),
+
+                              const SizedBox(height: 4),
+
+                              // Stats
+                              Row(
+                                mainAxisAlignment:
+                                    MainAxisAlignment.spaceBetween,
+                                children: [
+                                  _StatChip(
+                                    label: 'HP',
+                                    value: widget.pokemon.stats[0].baseStat
+                                        .toString(),
+                                    color: const Color(0xFFFF6B6B),
+                                  ),
+                                  _StatChip(
+                                    label: 'ATK',
+                                    value: widget.pokemon.stats[1].baseStat
+                                        .toString(),
+                                    color: const Color(0xFFFFD93D),
+                                  ),
+                                  _StatChip(
+                                    label: 'DEF',
+                                    value: widget.pokemon.stats[2].baseStat
+                                        .toString(),
+                                    color: const Color(0xFF4ECDC4),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
+                  )
+                  .animate()
+                  .fadeIn(delay: Duration(milliseconds: widget.index * 30))
+                  .scale(
+                    begin: const Offset(0.8, 0.8),
+                    end: const Offset(1, 1),
+                    delay: Duration(milliseconds: widget.index * 30),
                   ),
-                ),
-              ],
-            ),
-          )
-              .animate()
-              .fadeIn(delay: Duration(milliseconds: widget.index * 30))
-              .scale(
-                begin: const Offset(0.8, 0.8),
-                end: const Offset(1, 1),
-                delay: Duration(milliseconds: widget.index * 30),
-              ),
         ),
       ),
     );

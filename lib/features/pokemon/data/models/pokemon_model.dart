@@ -46,7 +46,9 @@ class PokemonModel extends PokemonEntity {
       'height': height,
       'weight': weight,
       'stats': stats.map((s) => (s as PokemonStatModel).toJson()).toList(),
-      'abilities': abilities.map((a) => (a as PokemonAbilityModel).toJson()).toList(),
+      'abilities': abilities
+          .map((a) => (a as PokemonAbilityModel).toJson())
+          .toList(),
       'base_experience': baseExperience,
       'genus': genus,
       'description': description,
@@ -55,7 +57,8 @@ class PokemonModel extends PokemonEntity {
 
   static String _extractImageUrl(Map<String, dynamic> json) {
     try {
-      return json['sprites']?['other']?['official-artwork']?['front_default'] as String? ??
+      return json['sprites']?['other']?['official-artwork']?['front_default']
+              as String? ??
           json['sprites']?['front_default'] as String? ??
           '';
     } catch (e) {
@@ -65,7 +68,8 @@ class PokemonModel extends PokemonEntity {
 
   static String? _extractShinyImageUrl(Map<String, dynamic> json) {
     try {
-      return json['sprites']?['other']?['official-artwork']?['front_shiny'] as String?;
+      return json['sprites']?['other']?['official-artwork']?['front_shiny']
+          as String?;
     } catch (e) {
       return null;
     }
@@ -90,19 +94,26 @@ class PokemonModel extends PokemonEntity {
       final stats = json['stats'] as List<dynamic>?;
       if (stats == null) return [];
       return stats
-          .map((stat) => PokemonStatModel.fromJson(stat as Map<String, dynamic>))
+          .map(
+            (stat) => PokemonStatModel.fromJson(stat as Map<String, dynamic>),
+          )
           .toList();
     } catch (e) {
       return [];
     }
   }
 
-  static List<PokemonAbilityEntity> _extractAbilities(Map<String, dynamic> json) {
+  static List<PokemonAbilityEntity> _extractAbilities(
+    Map<String, dynamic> json,
+  ) {
     try {
       final abilities = json['abilities'] as List<dynamic>?;
       if (abilities == null) return [];
       return abilities
-          .map((ability) => PokemonAbilityModel.fromJson(ability as Map<String, dynamic>))
+          .map(
+            (ability) =>
+                PokemonAbilityModel.fromJson(ability as Map<String, dynamic>),
+          )
           .toList();
     } catch (e) {
       return [];
@@ -168,10 +179,7 @@ class PokemonStatModel extends PokemonStatEntity {
 
 /// Data model for Pokemon ability
 class PokemonAbilityModel extends PokemonAbilityEntity {
-  const PokemonAbilityModel({
-    required super.name,
-    required super.isHidden,
-  });
+  const PokemonAbilityModel({required super.name, required super.isHidden});
 
   factory PokemonAbilityModel.fromJson(Map<String, dynamic> json) {
     return PokemonAbilityModel(
@@ -199,7 +207,7 @@ class PokemonListItemModel extends PokemonListItemEntity {
   factory PokemonListItemModel.fromJson(Map<String, dynamic> json) {
     final url = json['url'] as String? ?? '';
     final id = _extractIdFromUrl(url);
-    
+
     return PokemonListItemModel(
       id: id,
       name: json['name'] as String? ?? '',
@@ -222,9 +230,6 @@ class PokemonListItemModel extends PokemonListItemEntity {
   }
 
   Map<String, dynamic> toJson() {
-    return {
-      'name': name,
-      'url': 'https://pokeapi.co/api/v2/pokemon/$id/',
-    };
+    return {'name': name, 'url': 'https://pokeapi.co/api/v2/pokemon/$id/'};
   }
 }

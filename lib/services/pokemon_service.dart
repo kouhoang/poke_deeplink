@@ -25,9 +25,7 @@ class PokemonService {
 
   Future<Pokemon> getPokemonDetail(int id) async {
     try {
-      final response = await http.get(
-        Uri.parse('$baseUrl/pokemon/$id'),
-      );
+      final response = await http.get(Uri.parse('$baseUrl/pokemon/$id'));
 
       if (response.statusCode == 200) {
         final data = json.decode(response.body);

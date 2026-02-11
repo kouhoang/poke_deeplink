@@ -10,10 +10,7 @@ import 'dart:math' as math;
 class PokemonDetailScreen extends StatefulWidget {
   final String id;
 
-  const PokemonDetailScreen({
-    super.key,
-    required this.id,
-  });
+  const PokemonDetailScreen({super.key, required this.id});
 
   @override
   State<PokemonDetailScreen> createState() => _PokemonDetailScreenState();
@@ -46,7 +43,9 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
 
   Future<void> _loadPokemonDetail() async {
     try {
-      final pokemon = await _pokemonService.getPokemonDetail(int.parse(widget.id));
+      final pokemon = await _pokemonService.getPokemonDetail(
+        int.parse(widget.id),
+      );
       setState(() {
         _pokemon = pokemon;
         _isLoading = false;
@@ -132,7 +131,11 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
-              const Icon(Icons.error_outline, size: 80, color: Color(0xFFFF6B6B)),
+              const Icon(
+                Icons.error_outline,
+                size: 80,
+                color: Color(0xFFFF6B6B),
+              ),
               const SizedBox(height: 16),
               Text(
                 'Error loading Pokémon',
@@ -156,7 +159,10 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
                 style: ElevatedButton.styleFrom(
                   backgroundColor: const Color(0xFF4ECDC4),
                   foregroundColor: Colors.white,
-                  padding: const EdgeInsets.symmetric(horizontal: 32, vertical: 16),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 32,
+                    vertical: 16,
+                  ),
                   shape: RoundedRectangleBorder(
                     borderRadius: BorderRadius.circular(30),
                   ),
@@ -194,10 +200,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
                       width: 2,
                     ),
                   ),
-                  child: const Icon(
-                    Icons.arrow_back,
-                    color: Colors.white,
-                  ),
+                  child: const Icon(Icons.arrow_back, color: Colors.white),
                 ),
               ),
             ),
@@ -266,15 +269,16 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
                           duration: const Duration(milliseconds: 500),
                           child: CachedNetworkImage(
                             key: ValueKey(_showShiny),
-                            imageUrl: _showShiny && pokemon.shinyImageUrl != null
+                            imageUrl:
+                                _showShiny && pokemon.shinyImageUrl != null
                                 ? pokemon.shinyImageUrl!
                                 : pokemon.imageUrl,
                             height: 250,
                             width: 250,
                             placeholder: (context, url) =>
                                 const CircularProgressIndicator(
-                              color: Colors.white,
-                            ),
+                                  color: Colors.white,
+                                ),
                             errorWidget: (context, url, error) => const Icon(
                               Icons.catching_pokemon,
                               size: 200,
@@ -319,31 +323,38 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
                     Positioned(
                       top: 100,
                       left: 20,
-                      child: GestureDetector(
-                        onTap: () => setState(() => _showShiny = !_showShiny),
-                        child: Container(
-                          padding: const EdgeInsets.all(12),
-                          decoration: BoxDecoration(
-                            color: _showShiny
-                                ? Colors.amber.withValues(alpha: 0.9)
-                                : Colors.black.withValues(alpha: 0.3),
-                            shape: BoxShape.circle,
-                            border: Border.all(
-                              color: Colors.white.withValues(alpha: 0.3),
-                              width: 2,
-                            ),
-                          ),
-                          child: Icon(
-                            Icons.star,
-                            color: Colors.white,
-                            size: 28,
-                          ),
-                        ),
-                      ).animate(onPlay: (controller) => controller.repeat())
-                          .shimmer(
-                        duration: const Duration(seconds: 2),
-                        color: Colors.amber,
-                      ),
+                      child:
+                          GestureDetector(
+                                onTap: () =>
+                                    setState(() => _showShiny = !_showShiny),
+                                child: Container(
+                                  padding: const EdgeInsets.all(12),
+                                  decoration: BoxDecoration(
+                                    color: _showShiny
+                                        ? Colors.amber.withValues(alpha: 0.9)
+                                        : Colors.black.withValues(alpha: 0.3),
+                                    shape: BoxShape.circle,
+                                    border: Border.all(
+                                      color: Colors.white.withValues(
+                                        alpha: 0.3,
+                                      ),
+                                      width: 2,
+                                    ),
+                                  ),
+                                  child: Icon(
+                                    Icons.star,
+                                    color: Colors.white,
+                                    size: 28,
+                                  ),
+                                ),
+                              )
+                              .animate(
+                                onPlay: (controller) => controller.repeat(),
+                              )
+                              .shimmer(
+                                duration: const Duration(seconds: 2),
+                                color: Colors.amber,
+                              ),
                     ),
                 ],
               ),
@@ -353,9 +364,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
           // Content
           SliverToBoxAdapter(
             child: Container(
-              decoration: const BoxDecoration(
-                color: Color(0xFF0F172A),
-              ),
+              decoration: const BoxDecoration(color: Color(0xFF0F172A)),
               child: Column(
                 children: [
                   const SizedBox(height: 24),
@@ -425,11 +434,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
             child: Row(
               mainAxisSize: MainAxisSize.min,
               children: [
-                Icon(
-                  _getTypeIcon(type),
-                  color: Colors.white,
-                  size: 20,
-                ),
+                Icon(_getTypeIcon(type), color: Colors.white, size: 20),
                 const SizedBox(width: 8),
                 Text(
                   type.toUpperCase(),
@@ -522,10 +527,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
         ),
         Text(
           label,
-          style: GoogleFonts.poppins(
-            fontSize: 12,
-            color: Colors.white60,
-          ),
+          style: GoogleFonts.poppins(fontSize: 12, color: Colors.white60),
         ),
       ],
     );
@@ -551,7 +553,10 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
             runSpacing: 12,
             children: pokemon.abilities.map((ability) {
               return Container(
-                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 12),
+                padding: const EdgeInsets.symmetric(
+                  horizontal: 20,
+                  vertical: 12,
+                ),
                 decoration: BoxDecoration(
                   color: ability.isHidden
                       ? const Color(0xFFB388EB).withValues(alpha: 0.2)
@@ -603,10 +608,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
           gradient: LinearGradient(
             begin: Alignment.topLeft,
             end: Alignment.bottomRight,
-            colors: [
-              const Color(0xFF1E293B),
-              const Color(0xFF334155),
-            ],
+            colors: [const Color(0xFF1E293B), const Color(0xFF334155)],
           ),
           borderRadius: BorderRadius.circular(24),
           boxShadow: [
@@ -659,7 +661,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
     required int delay,
   }) {
     final percentage = stat.baseStat / 255;
-    
+
     return Column(
       crossAxisAlignment: CrossAxisAlignment.start,
       children: [
@@ -670,7 +672,10 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
               children: [
                 Container(
                   width: 80,
-                  padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 6),
+                  padding: const EdgeInsets.symmetric(
+                    horizontal: 12,
+                    vertical: 6,
+                  ),
                   decoration: BoxDecoration(
                     color: color.withValues(alpha: 0.2),
                     borderRadius: BorderRadius.circular(12),
@@ -730,24 +735,22 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
             ),
             FractionallySizedBox(
               widthFactor: percentage,
-              child: Container(
-                height: 12,
-                decoration: BoxDecoration(
-                  gradient: LinearGradient(
-                    colors: [
-                      color,
-                      color.withValues(alpha: 0.7),
-                    ],
-                  ),
-                  borderRadius: BorderRadius.circular(6),
-                  boxShadow: [
-                    BoxShadow(
-                      color: color.withValues(alpha: 0.5),
-                      blurRadius: 8,
+              child:
+                  Container(
+                    height: 12,
+                    decoration: BoxDecoration(
+                      gradient: LinearGradient(
+                        colors: [color, color.withValues(alpha: 0.7)],
+                      ),
+                      borderRadius: BorderRadius.circular(6),
+                      boxShadow: [
+                        BoxShadow(
+                          color: color.withValues(alpha: 0.5),
+                          blurRadius: 8,
+                        ),
+                      ],
                     ),
-                  ],
-                ),
-              ).animate().scaleX(
+                  ).animate().scaleX(
                     duration: const Duration(milliseconds: 800),
                     delay: Duration(milliseconds: delay),
                     begin: 0,
@@ -784,11 +787,7 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
               ),
               child: Column(
                 children: [
-                  Icon(
-                    Icons.height,
-                    color: const Color(0xFF4ECDC4),
-                    size: 36,
-                  ),
+                  Icon(Icons.height, color: const Color(0xFF4ECDC4), size: 36),
                   const SizedBox(height: 12),
                   Text(
                     'Height',
