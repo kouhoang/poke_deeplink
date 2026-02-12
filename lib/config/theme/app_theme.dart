@@ -1,37 +1,34 @@
 import 'package:flutter/material.dart';
 import 'package:google_fonts/google_fonts.dart';
+import '../../core/constants/app_colors.dart';
 
 class AppTheme {
   AppTheme._();
 
-  static const Color primaryColor = Color(0xFF4ECDC4);
-  static const Color backgroundColor = Color(0xFF0F172A);
-  static const Color surfaceColor = Color(0xFF1E293B);
-  static const Color errorColor = Color(0xFFEF4444);
-
   static ThemeData get darkTheme {
     return ThemeData(
       colorScheme: ColorScheme.fromSeed(
-        seedColor: primaryColor,
+        seedColor: AppColors.primary,
         brightness: Brightness.dark,
-        surface: surfaceColor,
-        error: errorColor,
+        surface: AppColors.surface,
+        error: AppColors.error,
       ),
       useMaterial3: true,
-      scaffoldBackgroundColor: backgroundColor,
+      scaffoldBackgroundColor: AppColors.background,
       textTheme: GoogleFonts.poppinsTextTheme(ThemeData.dark().textTheme),
       appBarTheme: const AppBarTheme(
         backgroundColor: Colors.transparent,
         elevation: 0,
         centerTitle: true,
       ),
-      cardTheme: const CardThemeData(
-        color: surfaceColor,
+      cardTheme: CardThemeData(
+        color: AppColors.surface,
         elevation: 4,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.all(Radius.circular(16)),
         ),
       ),
     );
   }
 }
+

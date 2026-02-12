@@ -1,30 +1,24 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
 import '../../../../../core/constants/api_constants.dart';
-import '../../../domain/usecases/get_pokemon_list.dart';
-import 'pokemon_list_event.dart';
+import '../../domain/usecases/get_pokemon_list.dart';
 import 'pokemon_list_state.dart';
 
-/// BLoC for Pokemon list management
-class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
+/// Cubit for Pokemon list management
+class PokemonListCubit extends Cubit<PokemonListState> {
   final GetPokemonList getPokemonList;
 
-  PokemonListBloc({required this.getPokemonList})
-    : super(const PokemonListInitial()) {
-    on<LoadPokemonList>(_onLoadPokemonList);
-    on<LoadPokemonPage>(_onLoadPokemonPage);
-    on<RefreshPokemonList>(_onRefreshPokemonList);
-    on<LoadMorePokemons>(_onLoadMorePokemons);
-  }
+  PokemonListCubit({required this.getPokemonList})
+    : super(const PokemonListInitial());
 
-  /// Handles loading Pokemon list
-  Future<void> _onLoadPokemonList(
-    LoadPokemonList event,
-    Emitter<PokemonListState> emit,
-  ) async {
+  /// Load Pokemon list
+  Future<void> loadPokemonList({
+    int limit = ApiConstants.defaultLimit,
+    int offset = 0,
+  }) async {
     emit(const PokemonListLoading());
 
     final result = await getPokemonList(
-      GetPokemonListParams(limit: event.limit, offset: event.offset),
+      GetPokemonListParams(limit: limit, offset: offset),
     );
 
     result.fold((failure) => emit(PokemonListError(message: failure.message)), (
@@ -36,24 +30,21 @@ class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
           pokemons: pokemons,
           currentPage: 1,
           totalPages: totalPages,
-          hasMore: pokemons.length >= event.limit,
+          hasMore: pokemons.length >= limit,
         ),
       );
     });
   }
 
-  /// Handles loading a specific page
-  Future<void> _onLoadPokemonPage(
-    LoadPokemonPage event,
-    Emitter<PokemonListState> emit,
-  ) async {
+  /// Load a specific page
+  Future<void> loadPokemonPage(int page) async {
     final currentState = state;
 
     if (currentState is PokemonListLoaded) {
       emit(const PokemonListLoading());
 
       final result = await getPokemonList(
-        GetPokemonListParams(limit: ApiConstants.defaultLimit, offset: 0),
+        const GetPokemonListParams(limit: ApiConstants.defaultLimit, offset: 0),
       );
 
       result.fold(
@@ -64,7 +55,7 @@ class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
           emit(
             PokemonListLoaded(
               pokemons: pokemons,
-              currentPage: event.page,
+              currentPage: page,
               totalPages: totalPages,
             ),
           );
@@ -73,11 +64,8 @@ class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
     }
   }
 
-  /// Handles refreshing the list
-  Future<void> _onRefreshPokemonList(
-    RefreshPokemonList event,
-    Emitter<PokemonListState> emit,
-  ) async {
+  /// Refresh the list
+  Future<void> refreshPokemonList() async {
     // Refresh without showing loading state
     final result = await getPokemonList(
       const GetPokemonListParams(limit: ApiConstants.defaultLimit, offset: 0),
@@ -97,11 +85,8 @@ class PokemonListBloc extends Bloc<PokemonListEvent, PokemonListState> {
     });
   }
 
-  /// Handles loading more items (pagination)
-  Future<void> _onLoadMorePokemons(
-    LoadMorePokemons event,
-    Emitter<PokemonListState> emit,
-  ) async {
+  /// Load more items (pagination)
+  Future<void> loadMorePokemons() async {
     final currentState = state;
 
     if (currentState is PokemonListLoaded && currentState.hasMore) {

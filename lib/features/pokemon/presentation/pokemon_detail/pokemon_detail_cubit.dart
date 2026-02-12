@@ -1,6 +1,6 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import '../../../domain/usecases/get_pokemon_detail.dart';
-import '../../../domain/usecases/get_pokemon_by_name.dart';
+import '../../domain/usecases/get_pokemon_detail.dart';
+import '../../domain/usecases/get_pokemon_by_name.dart';
 import 'pokemon_detail_state.dart';
 
 /// Cubit for Pokemon detail management

@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../domain/entities/pokemon_entity.dart';
+import '../../domain/entities/pokemon_entity.dart';
 
 /// Base state for Pokemon detail
 abstract class PokemonDetailState extends Equatable {
@@ -19,7 +19,7 @@ class PokemonDetailLoading extends PokemonDetailState {
   const PokemonDetailLoading();
 }
 
-/// Loaded state with data
+/// Loaded state with Pokemon data
 class PokemonDetailLoaded extends PokemonDetailState {
   final PokemonEntity pokemon;
 

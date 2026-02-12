@@ -1,5 +1,5 @@
 import 'package:equatable/equatable.dart';
-import '../../../domain/entities/pokemon_entity.dart';
+import '../../domain/entities/pokemon_entity.dart';
 
 /// Base state for Pokemon list
 abstract class PokemonListState extends Equatable {

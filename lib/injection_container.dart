@@ -6,8 +6,8 @@ import 'features/pokemon/domain/repositories/pokemon_repository.dart';
 import 'features/pokemon/domain/usecases/get_pokemon_by_name.dart';
 import 'features/pokemon/domain/usecases/get_pokemon_detail.dart';
 import 'features/pokemon/domain/usecases/get_pokemon_list.dart';
-import 'features/pokemon/presentation/cubit/pokemon_detail/pokemon_detail_cubit.dart';
-import 'features/pokemon/presentation/cubit/pokemon_list/pokemon_list_cubit.dart';
+import 'features/pokemon/presentation/pokemon_detail/pokemon_detail_cubit.dart';
+import 'features/pokemon/presentation/pokemon_list/pokemon_list_cubit.dart';
 
 final sl = GetIt.instance;
 
