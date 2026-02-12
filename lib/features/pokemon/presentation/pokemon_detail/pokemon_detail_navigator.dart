@@ -18,7 +18,7 @@ class PokemonDetailNavigator {
 
   /// Share deep link
   Future<void> shareDeepLink(BuildContext context, int pokemonId) async {
-    final deepLink = 'https://poke-deeplink.vercel.app/pokemon/$pokemonId';
+    final deepLink = 'https://poke-kou.vercel.app/pokemon/$pokemonId';
     await Clipboard.setData(ClipboardData(text: deepLink));
     
     if (context.mounted) {

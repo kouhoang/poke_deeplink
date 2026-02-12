@@ -35,7 +35,7 @@
                 <!-- Deep link for Pokemon app -->
                 <data
                     android:scheme="https"
-                    android:host="koupokedeeplink.vercel.app"
+                    android:host="poke-kou.vercel.app"
                     android:pathPrefix="/pokemon"/>
             </intent-filter>
             
@@ -47,7 +47,7 @@
                 
                 <data
                     android:scheme="https"
-                    android:host="koupokedeeplink.vercel.app"
+                    android:host="poke-kou.vercel.app"
                     android:path="/"/>
             </intent-filter>
         </activity>

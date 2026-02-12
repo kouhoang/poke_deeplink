@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter_animate/flutter_animate.dart';
 import 'package:google_fonts/google_fonts.dart';
@@ -880,20 +881,36 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
         child: Material(
           color: Colors.transparent,
           child: InkWell(
-            onTap: () {
-              ScaffoldMessenger.of(context).showSnackBar(
-                SnackBar(
-                  content: Text(
-                    'Share: https://your-domain.vercel.app/pokemon/${pokemon.id}',
-                    style: GoogleFonts.poppins(),
+            onTap: () async {
+              final deepLink = 'https://poke-kou.vercel.app/pokemon/${pokemon.id}';
+              await Clipboard.setData(ClipboardData(text: deepLink));
+              
+              if (context.mounted) {
+                ScaffoldMessenger.of(context).showSnackBar(
+                  SnackBar(
+                    content: Row(
+                      children: [
+                        const Icon(Icons.check_circle, color: Colors.white),
+                        const SizedBox(width: 12),
+                        Expanded(
+                          child: Text(
+                            'Deep link copied to clipboard!',
+                            style: GoogleFonts.poppins(
+                              fontWeight: FontWeight.w500,
+                            ),
+                          ),
+                        ),
+                      ],
+                    ),
+                    backgroundColor: const Color(0xFF6BCF7F),
+                    behavior: SnackBarBehavior.floating,
+                    shape: RoundedRectangleBorder(
+                      borderRadius: BorderRadius.circular(12),
+                    ),
+                    duration: const Duration(seconds: 2),
                   ),
-                  backgroundColor: primaryColor,
-                  behavior: SnackBarBehavior.floating,
-                  shape: RoundedRectangleBorder(
-                    borderRadius: BorderRadius.circular(12),
-                  ),
-                ),
-              );
+                );
+              }
             },
             borderRadius: BorderRadius.circular(20),
             child: Padding(
@@ -901,10 +918,10 @@ class _PokemonDetailScreenState extends State<PokemonDetailScreen>
               child: Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
-                  const Icon(Icons.share, color: Colors.white, size: 24),
+                  const Icon(Icons.content_copy, color: Colors.white, size: 24),
                   const SizedBox(width: 12),
                   Text(
-                    'Share ${pokemon.capitalizedName}',
+                    'Copy Deep Link',
                     style: GoogleFonts.poppins(
                       fontSize: 18,
                       fontWeight: FontWeight.bold,
