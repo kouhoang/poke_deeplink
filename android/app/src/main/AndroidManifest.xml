@@ -32,23 +32,10 @@
                 <category android:name="android.intent.category.DEFAULT"/>
                 <category android:name="android.intent.category.BROWSABLE"/>
                 
-                <!-- Deep link for Pokemon app -->
+                <!-- Match all paths from poke-kou.vercel.app -->
                 <data
                     android:scheme="https"
-                    android:host="poke-kou.vercel.app"
-                    android:pathPrefix="/pokemon"/>
-            </intent-filter>
-            
-            <!-- Deep link for home/root path -->
-            <intent-filter android:autoVerify="true">
-                <action android:name="android.intent.action.VIEW"/>
-                <category android:name="android.intent.category.DEFAULT"/>
-                <category android:name="android.intent.category.BROWSABLE"/>
-                
-                <data
-                    android:scheme="https"
-                    android:host="poke-kou.vercel.app"
-                    android:path="/"/>
+                    android:host="poke-kou.vercel.app"/>
             </intent-filter>
         </activity>
         <!-- Don't delete the meta-data below.
